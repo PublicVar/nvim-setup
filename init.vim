@@ -43,6 +43,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'lumiliet/vim-twig'
 Plug 'vim-vdebug/vdebug'
 Plug 'leafOfTree/vim-svelte-plugin' 
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 call plug#end()
 
 " Find files using Telescope command-line sugar.
