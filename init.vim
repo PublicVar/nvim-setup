@@ -42,6 +42,7 @@ Plug 'Pocco81/AutoSave.nvim'
 Plug 'vim-airline/vim-airline'
 Plug 'lumiliet/vim-twig'
 Plug 'vim-vdebug/vdebug'
+Plug 'leafOfTree/vim-svelte-plugin' 
 call plug#end()
 
 " Find files using Telescope command-line sugar.
@@ -64,6 +65,23 @@ let g:airline_powerline_fonts = 1
 "let g:coc_filetype_map = {
 "            \ 'twig': 'html'
 "            \ }
+"
+" Coc extensions list
+let g:coc_global_extensions = [
+            \'coc-svelte',
+            \'coc-snippets',
+            \'coc-html-css-support',
+            \'coc-html',
+            \'coc-highlight',
+            \'coc-eslint',
+            \'coc-yaml',
+            \'coc-tsserver',
+            \'coc-python',
+            \'coc-phpactor',
+            \'coc-php-cs-fixer',
+            \'coc-json',
+            \'coc-css'
+            \]
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -138,3 +156,6 @@ nnoremap <silent> <leader>q :q!<cr>
 nnoremap <silent> <leader>s :w!<cr> 
 " Autoindent
 nnoremap <silent> <leader>i =G<cr>
+
+" Vim Svelte 
+let g:vim_svelte_plugin_use_typescript = 1
