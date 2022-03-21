@@ -57,7 +57,10 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
-let NERDTreeShowHidden=1 " display hidden files
+" display hidden files
+let NERDTreeShowHidden=1 
+" hide nerdtree after opened a file
+let NERDTreeQuitOnOpen=1
 
 " Airline 
 let g:airline_powerline_fonts = 1
@@ -156,7 +159,31 @@ nnoremap <silent> <leader>q :q!<cr>
 " Sauvegarde
 nnoremap <silent> <leader>s :w!<cr> 
 " Autoindent
-nnoremap <silent> <leader>i =G<cr>
+nnoremap <silent> <leader>i gg=G<cr>
 
 " Vim Svelte 
 let g:vim_svelte_plugin_use_typescript = 1
+
+" Vim autosave
+
+lua << EOF
+local autosave = require("autosave")
+
+autosave.setup(
+    {
+        enabled = true,
+        execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
+        events = {"InsertLeave", "TextChanged"},
+        conditions = {
+            exists = true,
+            filename_is_not = {},
+            filetype_is_not = {},
+            modifiable = true
+        },
+        write_all_buffers = false,
+        on_off_commands = true,
+        clean_command_line_interval = 0,
+        debounce_delay = 135
+    }
+)
+EOF
