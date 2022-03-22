@@ -1,5 +1,5 @@
 set nocompatible            " disable compatibility to old-time vi
-let mapleader = "f"         " change leader key
+let mapleader = ","         " change leader key
 set showmatch               " show matching 
 set ignorecase              " case insensitive 
 set mouse=v                 " middle-click paste with 
@@ -64,7 +64,9 @@ let NERDTreeQuitOnOpen=1
 
 " Airline 
 let g:airline_powerline_fonts = 1
-
+" Show buffers
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
 " Coc
 "let g:coc_filetype_map = {
 "            \ 'twig': 'html'
@@ -160,11 +162,13 @@ nnoremap <silent> <leader>q :q!<cr>
 nnoremap <silent> <leader>s :w!<cr> 
 " Autoindent
 nnoremap <silent> <leader>i gg=G<cr>
+" Move between buffers
+map <C-J> :bnext<CR>
+map <C-K> :bprev<CR>
 
 " Vim Svelte 
 let g:vim_svelte_plugin_use_typescript = 1
 
-" Vim autosave
 
 lua << EOF
 local autosave = require("autosave")
