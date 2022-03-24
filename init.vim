@@ -1,7 +1,6 @@
 set nocompatible            " disable compatibility to old-time vi
 let mapleader = ","         " change leader key
 set showmatch               " show matching 
-set ignorecase              " case insensitive 
 set mouse=v                 " middle-click paste with 
 set hlsearch                " highlight search 
 set incsearch               " incremental search
@@ -44,6 +43,9 @@ Plug 'lumiliet/vim-twig'
 Plug 'vim-vdebug/vdebug'
 Plug 'leafOfTree/vim-svelte-plugin' 
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'preservim/nerdcommenter'
 call plug#end()
 
 " Find files using Telescope command-line sugar.
@@ -156,20 +158,36 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Custom shortcuts
-" Ferme la fenêtre
+" Close nvim
 nnoremap <silent> <leader>q :q!<cr> 
-" Sauvegarde
+" Save
 nnoremap <silent> <leader>s :w!<cr> 
 " Autoindent
 nnoremap <silent> <leader>i gg=G<cr>
 " Move between buffers
-map <C-J> :bnext<CR>
-map <C-K> :bprev<CR>
+map <C-K> :bnext<CR>
+map <C-J> :bprev<CR>
+
+" Open/Close brackets and similar stuffs
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
 
 " Vim Svelte 
 let g:vim_svelte_plugin_use_typescript = 1
 
-
+" Vim debug
+if !exists('g:vdebug_options')
+    let g:vdebug_options = {}
+endif
+let g:vdebug_options["port"] = 9000
+" Not stopping on the first line
+let g:vdebug_options["break_on_open"] = 0
+" AutoSave
 lua << EOF
 local autosave = require("autosave")
 
@@ -191,3 +209,48 @@ autosave.setup(
     }
 )
 EOF
+
+" Gitsigns
+lua << EOF
+require('gitsigns').setup {
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+    map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+
+    -- Actions
+    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map('n', '<leader>td', gs.toggle_deleted)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+}
+EOF
+
+" vim commentary
+setglobal commentstring=#\ %s
+augroup comments
+  autocmd!
+  autocmd FileType twig setlocal commentstring={#\ %s
+augroup END
+
+" make sure .twig uses twig language and not django for example
+autocmd BufNewFile,BufRead *.twig :set filetype=twig
