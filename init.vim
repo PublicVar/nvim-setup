@@ -51,6 +51,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'dense-analysis/ale'
 Plug 'jmcantrell/vim-virtualenv'
+Plug 'yaegassy/coc-tailwindcss3', {'do': 'yarn install --frozen-lockfile'}
 " Plug 'xdebug/vscode-php-debug', { 'do': 'npm install && npm run build' }
 call plug#end()
 
@@ -259,7 +260,7 @@ augroup comments
 augroup END
 
 " make sure .twig uses twig language and not django for example
-" autocmd BufNewFile,BufRead *.twig :set filetype=twig
+autocmd BufNewFile,BufRead *.twig :set filetype=html
 
 " PROJECTROOT : this is used to allow vdebug to be able to debug app in docker
 " containers
@@ -306,6 +307,6 @@ let g:ale_fixers = {
 \   'python': ['autopep8'],
 \}
 let g:ale_disable_lsp = 1
-nnoremap <silent><Leader>a :ALEFix<cr>
+nnoremap <Leader>a :ALEFix<cr>
 " Reload init.vim configuration
 nnoremap <silent> <Leader><Leader>i :source $MYVIMRC<cr>
